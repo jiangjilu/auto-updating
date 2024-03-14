@@ -3,12 +3,17 @@
 package main
 
 import (
+	"fmt"
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
 func main() {
-	h := server.Default()
+	port := ":9090"
+	h := server.Default(server.WithHostPorts(port))
 
 	register(h)
+
+	fmt.Printf("\n\n欢迎使用 auto-updating.com\nhttp://127.0.0.1%s\n\n", port)
+
 	h.Spin()
 }
