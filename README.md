@@ -11,3 +11,34 @@
 我希望能帮助这【少部分人】拿到结果。
 
 Auto-updating 项目，把你的灵感变成现实，并且在后台持续更新，自动化运行。
+
+# 项目初始化及更新
+
+**项目选型：**
+
+* HTTP框架 Hertz https://github.com/cloudwego/hertz
+
+开发者（一般用户可跳过）
+```shell
+# 安装 hz
+go install github.com/cloudwego/hertz/cmd/hz@latest
+
+# 新建
+hz new  -mod github.com/jiangjilu/auto-updating
+
+# 更新
+hz update
+```
+
+一般用户
+```shell
+# 下载
+git clone git@github.com:jiangjilu/auto-updating.git
+
+# 启动
+go run .
+
+# 访问
+http://localhost:8888/ping
+```
+
