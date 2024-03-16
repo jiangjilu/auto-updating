@@ -5,9 +5,12 @@ package main
 import (
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/jiangjilu/auto-updating/biz/dal"
 )
 
 func main() {
+	dal.Init()
+
 	port := ":9090"
 	h := server.Default(server.WithHostPorts(port))
 

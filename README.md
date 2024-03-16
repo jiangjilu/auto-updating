@@ -17,6 +17,7 @@ Auto-updating 项目，把你的灵感变成现实，并且在后台持续更新
 **项目选型：**
 
 * HTTP框架 Hertz https://github.com/cloudwego/hertz
+* ORM框架 Gorm https://github.com/go-gorm/gorm
 
 开发者（一般用户可跳过）
 ```shell
@@ -27,7 +28,8 @@ go install github.com/cloudwego/hertz/cmd/hz@latest
 hz new  -mod github.com/jiangjilu/auto-updating
 
 # 更新
-hz update
+go get github.com/cloudwego/thriftgo@latest
+hz update --model_dir biz/hertz_gen -idl idl/api.thrift
 ```
 
 一般用户
