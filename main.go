@@ -6,17 +6,52 @@ import (
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/jiangjilu/auto-updating/biz/dal"
+	"github.com/robfig/cron/v3"
+	"sync"
+	"time"
 )
 
+var wg sync.WaitGroup
+
+func createNewsArticle() {
+	// Logic to create a new news article goes here.
+	fmt.Println("\nCreating a new news article..." + time.Now().String())
+}
+
+func doCronRequest() {
+	c := cron.New(cron.WithSeconds())
+	_, err := c.AddFunc("1 * * * * *", createNewsArticle)
+	if err != nil {
+		fmt.Println("Error scheduling job: ", err)
+		return
+	}
+	c.Start()
+}
+
 func main() {
-	dal.Init()
+	wg.Add(2)
 
-	port := ":9090"
-	h := server.Default(server.WithHostPorts(port))
+	go func() {
+		defer wg.Done()
 
-	register(h)
+		dal.Init()
 
-	fmt.Printf("\n\n欢迎使用 auto-updating.com\nhttp://127.0.0.1%s\n\n", port)
+		port := ":9090"
+		h := server.Default(server.WithHostPorts(port))
 
-	h.Spin()
+		register(h)
+
+		fmt.Printf("\n\n欢迎使用 auto-updating.com\nhttp://127.0.0.1%s\n\n", port)
+
+		h.Spin()
+	}()
+
+	go func() {
+		defer wg.Done()
+
+		time.Sleep(time.Millisecond * 50)
+		doCronRequest()
+	}()
+
+	wg.Wait()
 }

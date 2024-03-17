@@ -5,6 +5,7 @@ go 1.22.1
 require (
 	github.com/apache/thrift v0.13.0
 	github.com/cloudwego/hertz v0.8.1
+	github.com/robfig/cron/v3 v3.0.1
 	gorm.io/driver/mysql v1.5.4
 	gorm.io/gorm v1.25.7
 )
