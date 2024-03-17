@@ -20,7 +20,10 @@ func createNewsArticle() {
 
 func doCronRequest() {
 	c := cron.New(cron.WithSeconds())
-	_, err := c.AddFunc("1 * * * * *", createNewsArticle)
+	//每分钟执行1次
+	//_, err := c.AddFunc("1 * * * * *", createNewsArticle)
+	//每秒执行1次
+	_, err := c.AddFunc("* * * * * *", createNewsArticle)
 	if err != nil {
 		fmt.Println("Error scheduling job: ", err)
 		return
