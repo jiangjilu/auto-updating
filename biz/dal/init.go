@@ -24,7 +24,8 @@ import (
 func Init() {
 	mysql.Init()
 
-	err := mysql.DB.AutoMigrate(&model.User{})
+	// AutoMigrate
+	err := mysql.DB.AutoMigrate(&model.User{}, &model.News{})
 	if err != nil {
 		return
 	}
