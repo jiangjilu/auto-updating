@@ -4,10 +4,12 @@ package news_gorm
 
 import (
 	"context"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	news_gorm "github.com/jiangjilu/auto-updating/biz/hertz_gen/news_gorm"
+	"github.com/jiangjilu/auto-updating/biz/dal/mysql"
+	"github.com/jiangjilu/auto-updating/biz/hertz_gen/news_gorm"
+	"github.com/jiangjilu/auto-updating/biz/model"
+	"github.com/jiangjilu/auto-updating/biz/pack"
 )
 
 // UpdateNews .
@@ -17,13 +19,23 @@ func UpdateNews(ctx context.Context, c *app.RequestContext) {
 	var req news_gorm.UpdateNewsRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		c.JSON(200, &news_gorm.UpdateNewsResponse{Code: news_gorm.Code_ParamInvalid, Msg: err.Error()})
 		return
 	}
 
-	resp := new(news_gorm.UpdateNewsResponse)
+	u := &model.News{}
+	u.ID = uint(req.ID)
+	u.Cid = req.Cid
+	u.Title = req.Title
+	u.Content = req.Content
+	u.State = int64(req.State)
 
-	c.JSON(consts.StatusOK, resp)
+	if err = mysql.UpdateNews(u); err != nil {
+		c.JSON(200, &news_gorm.UpdateNewsResponse{Code: news_gorm.Code_DBErr, Msg: err.Error()})
+		return
+	}
+
+	c.JSON(200, &news_gorm.UpdateNewsResponse{Code: news_gorm.Code_Success})
 }
 
 // DeleteNews .
@@ -33,13 +45,15 @@ func DeleteNews(ctx context.Context, c *app.RequestContext) {
 	var req news_gorm.DeleteNewsRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		c.JSON(consts.StatusOK, &news_gorm.DeleteNewsResponse{Code: news_gorm.Code_ParamInvalid, Msg: err.Error()})
+		return
+	}
+	if err = mysql.DeleteNews(req.ID); err != nil {
+		c.JSON(consts.StatusOK, &news_gorm.DeleteNewsResponse{Code: news_gorm.Code_DBErr, Msg: err.Error()})
 		return
 	}
 
-	resp := new(news_gorm.DeleteNewsResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, &news_gorm.DeleteNewsResponse{Code: news_gorm.Code_Success})
 }
 
 // QueryNews .
@@ -49,13 +63,17 @@ func QueryNews(ctx context.Context, c *app.RequestContext) {
 	var req news_gorm.QueryNewsRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		c.JSON(200, &news_gorm.QueryNewsResponse{Code: news_gorm.Code_ParamInvalid, Msg: err.Error()})
 		return
 	}
 
-	resp := new(news_gorm.QueryNewsResponse)
+	rowset, total, err := mysql.QueryNews(req.Keyword, req.Page, req.PageSize)
+	if err != nil {
+		c.JSON(200, &news_gorm.QueryNewsResponse{Code: news_gorm.Code_DBErr, Msg: err.Error()})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(200, &news_gorm.QueryNewsResponse{Code: news_gorm.Code_Success, Rowset: pack.Newses(rowset), Totoal: total})
 }
 
 // CreateNews .
@@ -65,11 +83,22 @@ func CreateNews(ctx context.Context, c *app.RequestContext) {
 	var req news_gorm.CreateNewsRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		c.JSON(200, &news_gorm.CreateNewsResponse{Code: news_gorm.Code_ParamInvalid, Msg: err.Error()})
+		return
+	}
+	if err = mysql.CreateNews([]*model.News{
+		{
+			Title:   req.Title,
+			State:   int64(req.State),
+			Cid:     req.Cid,
+			Content: req.Content,
+		},
+	}); err != nil {
+		c.JSON(200, &news_gorm.CreateNewsResponse{Code: news_gorm.Code_DBErr, Msg: err.Error()})
 		return
 	}
 
 	resp := new(news_gorm.CreateNewsResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	resp.Code = news_gorm.Code_Success
+	c.JSON(200, resp)
 }

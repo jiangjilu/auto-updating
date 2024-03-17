@@ -417,7 +417,7 @@ func (p *User) String() string {
 
 type CreateUserRequest struct {
 	Name      string `thrift:"name,1" form:"name" json:"name" vd:"(len($) > 0 && len($) < 100)"`
-	Gender    Gender `thrift:"gender,2" form:"gender" json:"gender" vd:"($ == 1||$ == 2)"`
+	Gender    Gender `thrift:"gender,2" form:"gender" form:"gender" json:"gender" vd:"($ == 1||$ == 2)"`
 	Age       int64  `thrift:"age,3" form:"age" form:"age" json:"age" vd:"$>0"`
 	Introduce string `thrift:"introduce,4" form:"introduce" json:"introduce" vd:"(len($) > 0 && len($) < 1000)"`
 }
@@ -1696,10 +1696,10 @@ func (p *DeleteUserResponse) String() string {
 
 type UpdateUserRequest struct {
 	UserID    int64  `thrift:"user_id,1" json:"user_id" path:"user_id" vd:"$>0"`
-	Name      string `thrift:"name,2" form:"name" json:"name" vd:"(len($) > 0 && len($) < 100)"`
-	Gender    Gender `thrift:"gender,3" form:"gender" form:"gender" json:"gender" vd:"($ == 1||$ == 2)"`
+	Name      string `thrift:"name,2" form:"name" form:"name" json:"name" vd:"(len($) > 0 && len($) < 100)"`
+	Gender    Gender `thrift:"gender,3" form:"gender" json:"gender" vd:"($ == 1||$ == 2)"`
 	Age       int64  `thrift:"age,4" form:"age" json:"age" vd:"$>0"`
-	Introduce string `thrift:"introduce,5" form:"introduce" form:"introduce" json:"introduce" vd:"(len($) > 0 && len($) < 1000)"`
+	Introduce string `thrift:"introduce,5" form:"introduce" json:"introduce" vd:"(len($) > 0 && len($) < 1000)"`
 }
 
 func NewUpdateUserRequest() *UpdateUserRequest {

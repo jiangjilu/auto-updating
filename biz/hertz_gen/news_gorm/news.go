@@ -417,9 +417,9 @@ func (p *News) String() string {
 
 type CreateNewsRequest struct {
 	Title   string `thrift:"title,1" form:"title" form:"title" json:"title" vd:"(len($) > 0 && len($) < 100)"`
-	State   State  `thrift:"state,2" form:"state" json:"state" vd:"($ == 1||$ == 2)"`
+	State   State  `thrift:"state,2" form:"state" json:"state" vd:"($ == 0||$ == 1||$ == 2)"`
 	Cid     int64  `thrift:"cid,3" form:"cid" json:"cid" vd:"$>0"`
-	Content string `thrift:"content,4" form:"content" form:"content" json:"content" vd:"(len($) > 0 && len($) < 1000)"`
+	Content string `thrift:"content,4" form:"content" json:"content" vd:"(len($) > 0 && len($) < 1000)"`
 }
 
 func NewCreateNewsRequest() *CreateNewsRequest {
@@ -862,8 +862,8 @@ func (p *CreateNewsResponse) String() string {
 }
 
 type QueryNewsRequest struct {
-	Keyword  *string `thrift:"Keyword,1,optional" form:"keyword" json:"keyword,omitempty" query:"keyword"`
-	Page     int64   `thrift:"page,2" form:"page" form:"page" json:"page" query:"page" vd:"$ > 0"`
+	Keyword  *string `thrift:"Keyword,1,optional" form:"keyword" form:"keyword" json:"keyword,omitempty" query:"keyword"`
+	Page     int64   `thrift:"page,2" form:"page" json:"page" query:"page" vd:"$ > 0"`
 	PageSize int64   `thrift:"page_size,3" form:"page_size" json:"page_size" query:"page_size" vd:"($ > 0 || $ <= 100)"`
 }
 
@@ -1098,7 +1098,7 @@ func (p *QueryNewsRequest) String() string {
 type QueryNewsResponse struct {
 	Code   Code    `thrift:"code,1" form:"code" json:"code" query:"code"`
 	Msg    string  `thrift:"msg,2" form:"msg" json:"msg" query:"msg"`
-	News   []*News `thrift:"news,3" form:"news" json:"news" query:"news"`
+	Rowset []*News `thrift:"rowset,3" form:"rowset" json:"rowset" query:"rowset"`
 	Totoal int64   `thrift:"totoal,4" form:"totoal" json:"totoal" query:"totoal"`
 }
 
@@ -1114,8 +1114,8 @@ func (p *QueryNewsResponse) GetMsg() (v string) {
 	return p.Msg
 }
 
-func (p *QueryNewsResponse) GetNews() (v []*News) {
-	return p.News
+func (p *QueryNewsResponse) GetRowset() (v []*News) {
+	return p.Rowset
 }
 
 func (p *QueryNewsResponse) GetTotoal() (v int64) {
@@ -1125,7 +1125,7 @@ func (p *QueryNewsResponse) GetTotoal() (v int64) {
 var fieldIDToName_QueryNewsResponse = map[int16]string{
 	1: "code",
 	2: "msg",
-	3: "news",
+	3: "rowset",
 	4: "totoal",
 }
 
@@ -1232,14 +1232,14 @@ func (p *QueryNewsResponse) ReadField3(iprot thrift.TProtocol) error {
 	if err != nil {
 		return err
 	}
-	p.News = make([]*News, 0, size)
+	p.Rowset = make([]*News, 0, size)
 	for i := 0; i < size; i++ {
 		_elem := NewNews()
 		if err := _elem.Read(iprot); err != nil {
 			return err
 		}
 
-		p.News = append(p.News, _elem)
+		p.Rowset = append(p.Rowset, _elem)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return err
@@ -1331,13 +1331,13 @@ WriteFieldEndError:
 }
 
 func (p *QueryNewsResponse) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("news", thrift.LIST, 3); err != nil {
+	if err = oprot.WriteFieldBegin("rowset", thrift.LIST, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.News)); err != nil {
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Rowset)); err != nil {
 		return err
 	}
-	for _, v := range p.News {
+	for _, v := range p.Rowset {
 		if err := v.Write(oprot); err != nil {
 			return err
 		}
@@ -1696,10 +1696,10 @@ func (p *DeleteNewsResponse) String() string {
 
 type UpdateNewsRequest struct {
 	ID      int64  `thrift:"id,1" json:"id" path:"id" vd:"$>0"`
-	Title   string `thrift:"title,2" form:"title" form:"title" json:"title" vd:"(len($) > 0 && len($) < 100)"`
+	Title   string `thrift:"title,2" form:"title" json:"title" vd:"(len($) > 0 && len($) < 100)"`
 	State   State  `thrift:"state,3" form:"state" json:"state" vd:"($ == 1||$ == 2)"`
-	Cid     int64  `thrift:"cid,4" form:"cid" json:"cid" vd:"$>0"`
-	Content string `thrift:"content,5" form:"content" form:"content" json:"content" vd:"(len($) > 0 && len($) < 1000)"`
+	Cid     int64  `thrift:"cid,4" form:"cid" form:"cid" json:"cid" vd:"$>0"`
+	Content string `thrift:"content,5" form:"content" json:"content" vd:"(len($) > 0 && len($) < 1000)"`
 }
 
 func NewUpdateNewsRequest() *UpdateNewsRequest {

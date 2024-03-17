@@ -26,7 +26,7 @@ struct News {
 
 struct CreateNewsRequest{
     1: string title      (api.body="title", api.form="title",api.vd="(len($) > 0 && len($) < 100)")
-    2: State state    (api.body="state", api.form="state",api.vd="($ == 1||$ == 2)")
+    2: State state    (api.body="state", api.form="state",api.vd="($ == 0||$ == 1||$ == 2)")
     3: i64    cid       (api.body="cid", api.form="cid",api.vd="$>0")
     4: string content (api.body="content", api.form="content",api.vd="(len($) > 0 && len($) < 1000)")
 }
@@ -45,7 +45,7 @@ struct QueryNewsRequest{
 struct QueryNewsResponse{
    1: Code code
    2: string msg
-   3: list<News> news
+   3: list<News> rowset
    4: i64 totoal
 }
 

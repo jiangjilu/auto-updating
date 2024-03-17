@@ -30,6 +30,7 @@ hz new  -mod github.com/jiangjilu/auto-updating
 # 更新
 go get github.com/cloudwego/thriftgo@latest
 hz update --model_dir biz/hertz_gen -idl idl/api.thrift
+hz update --model_dir biz/hertz_gen -idl idl/news.thrift
 ```
 
 一般用户
