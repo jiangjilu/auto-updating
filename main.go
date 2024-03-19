@@ -3,8 +3,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"github.com/cloudwego/hertz/pkg/app/client"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/cloudwego/hertz/pkg/protocol"
 	"github.com/jiangjilu/auto-updating/biz/dal"
 	"github.com/robfig/cron/v3"
 	"sync"
@@ -16,6 +19,26 @@ var wg sync.WaitGroup
 func createNewsArticle() {
 	// Logic to create a new news article goes here.
 	fmt.Println("\nCreating a new news article..." + time.Now().String())
+
+	c, err := client.NewClient()
+	if err != nil {
+		return
+	}
+
+	// Post request
+	var postArgs protocol.Args
+
+	//获取当前时间的年月日时分秒格式字符串
+	timeString := time.Now().Format("2006年01月02 15点04分05秒")
+	//设置分类ID为随机1-5
+	postArgs.Set("cid", fmt.Sprintf("%d", time.Now().UnixNano()%5+1))
+	postArgs.Set("title", "标题 "+timeString)
+	postArgs.Set("content", "资讯内容 "+timeString)
+	//设置状态 随机数 0-2
+	postArgs.Set("status", fmt.Sprintf("%d", time.Now().UnixNano()%3))
+
+	status, body, _ := c.Post(context.Background(), nil, "http://localhost:9090/v1/news/create", &postArgs)
+	fmt.Printf("status=%v body=%v\n", status, string(body))
 }
 
 func doCronRequest() {
