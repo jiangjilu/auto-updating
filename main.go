@@ -57,6 +57,7 @@ func doCronRequest() {
 func main() {
 	wg.Add(2)
 
+	// 开启 HTTP Web 服务
 	go func() {
 		defer wg.Done()
 
@@ -72,6 +73,7 @@ func main() {
 		h.Spin()
 	}()
 
+	// 自动化任务
 	go func() {
 		defer wg.Done()
 
