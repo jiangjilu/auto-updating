@@ -1,0 +1,35 @@
+{{ define "header" }}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Title -->
+    <title>{{ .title }} - {{getConfig "globalVariable.websiteTitle"}}</title>
+</head>
+
+<body>
+<header>
+<!-- 首页、列表页导航 -->
+<nav>
+    <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand" href="/">
+            <img src="/templates/assets/logo.png" alt="LOGO" width="150" height="54" class="d-inline-block align-text-top" style="border-radius: 0.5em;">
+        </a>
+
+        <!-- Navigation -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav" style="list-style-type: none; font-size: 1.2em;">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/list">列表</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</header>
+{{ end }}

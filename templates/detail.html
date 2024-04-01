@@ -1,0 +1,15 @@
+{{ template "header" . }}
+
+<main id="content" role="main">
+    <div>
+        <div>
+            <div>
+                <h1>{{ .row.Title | stripTags }}</h1>
+            </div>
+
+            <p>{{ .row.Content | keepHtml }}</p>
+        </div>
+    </div>
+</main>
+
+{{ template "footer" . }}

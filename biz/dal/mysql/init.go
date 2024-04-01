@@ -17,12 +17,18 @@
 package mysql
 
 import (
+	"fmt"
+	"github.com/jiangjilu/auto-updating/biz/myutils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
-var dsn = "gorm:gorm@tcp(localhost:3306)/gorm?charset=utf8&parseTime=True&loc=Local"
+var dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
+	myutils.GetConfig("mysql.username"), myutils.GetConfig("mysql.password"),
+	myutils.GetConfig("mysql.ip"), myutils.GetConfig("mysql.port"),
+	myutils.GetConfig("mysql.dbname"),
+)
 
 var DB *gorm.DB
 

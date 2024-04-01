@@ -9,6 +9,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/protocol"
 	"github.com/jiangjilu/auto-updating/biz/dal"
+	"github.com/jiangjilu/auto-updating/biz/mw"
 	"github.com/robfig/cron/v3"
 	"sync"
 	"time"
@@ -64,7 +65,13 @@ func main() {
 		dal.Init()
 
 		port := ":9090"
-		h := server.Default(server.WithHostPorts(port))
+		h := server.Default(
+			server.WithHostPorts(port),
+			// 修改html/templates模板后，自动重新渲染html无需重启服务
+			server.WithAutoReloadRender(true, 0),
+		)
+
+		h.Use(mw.Cms(h))
 
 		register(h)
 

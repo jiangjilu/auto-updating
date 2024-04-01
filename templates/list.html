@@ -1,0 +1,15 @@
+{{ template "header" . }}
+
+<main id="content" role="main">
+
+    <div class="p-10">
+        <ul>
+            {{ range .rowset }}
+            <li><a href="/detail/{{ .ID }}">{{ .Title }}</a></li>
+            {{ end }}
+        </ul>
+    </div>
+
+</main>
+
+{{ template "footer" . }}

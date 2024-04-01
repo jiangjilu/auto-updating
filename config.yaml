@@ -1,0 +1,13 @@
+host:
+  port: 9090
+
+mysql:
+  ip: 127.0.0.1
+  port: "3306"
+  dbname: gorm
+  username: gorm
+  password: gorm
+
+globalVariable:
+  websiteTitle: "AutoUpdating"
+  websiteDescription: "一件事情，如果自己不想重复去做，那就交给程序."
