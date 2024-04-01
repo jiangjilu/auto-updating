@@ -43,6 +43,6 @@ git clone git@github.com:jiangjilu/auto-updating.git
 go run .
 
 # 访问
-http://localhost:9090/ping
+http://localhost:9090/
 ```
 
