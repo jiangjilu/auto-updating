@@ -11,11 +11,24 @@ import (
 	"github.com/jiangjilu/auto-updating/biz/dal"
 	"github.com/jiangjilu/auto-updating/biz/mw"
 	"github.com/robfig/cron/v3"
+	"math/rand"
 	"sync"
 	"time"
 )
 
 var wg sync.WaitGroup
+
+const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+func generateRandomString() string {
+	rand.Seed(time.Now().UnixNano())
+	length := rand.Intn(20) + 1 // 生成1-20的随机数
+	result := make([]byte, length)
+	for i := range result {
+		result[i] = charset[rand.Intn(len(charset))]
+	}
+	return string(result)
+}
 
 func createNewsArticle() {
 	// Logic to create a new news article goes here.
@@ -38,7 +51,22 @@ func createNewsArticle() {
 	//设置状态 随机数 0-2
 	postArgs.Set("status", fmt.Sprintf("%d", time.Now().UnixNano()%3))
 
+	//1
+	randomString := generateRandomString()
+	postArgs.Set("title", randomString+"标题 "+timeString)
+	randomString = generateRandomString()
+	postArgs.Set("content", randomString+"资讯内容 "+timeString)
 	status, body, _ := c.Post(context.Background(), nil, "http://localhost:9090/v1/news/create", &postArgs)
+
+	//循环10次
+	for i := 0; i < 20; i++ {
+		randomString = generateRandomString()
+		postArgs.Set("title", randomString+"标题 "+timeString)
+		randomString = generateRandomString()
+		postArgs.Set("content", randomString+"资讯内容 "+timeString)
+		status, body, _ = c.Post(context.Background(), nil, "http://localhost:9090/v1/news/create", &postArgs)
+	}
+
 	fmt.Printf("status=%v body=%v\n", status, string(body))
 }
 
