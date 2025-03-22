@@ -417,8 +417,8 @@ func (p *User) String() string {
 
 type CreateUserRequest struct {
 	Name      string `thrift:"name,1" form:"name" json:"name" vd:"(len($) > 0 && len($) < 100)"`
-	Gender    Gender `thrift:"gender,2" form:"gender" form:"gender" json:"gender" vd:"($ == 1||$ == 2)"`
-	Age       int64  `thrift:"age,3" form:"age" form:"age" json:"age" vd:"$>0"`
+	Gender    Gender `thrift:"gender,2" form:"gender" json:"gender" vd:"($ == 1||$ == 2)"`
+	Age       int64  `thrift:"age,3" form:"age" json:"age" vd:"$>0"`
 	Introduce string `thrift:"introduce,4" form:"introduce" json:"introduce" vd:"(len($) > 0 && len($) < 1000)"`
 }
 
@@ -862,9 +862,9 @@ func (p *CreateUserResponse) String() string {
 }
 
 type QueryUserRequest struct {
-	Keyword  *string `thrift:"Keyword,1,optional" form:"keyword" json:"keyword,omitempty" query:"keyword"`
+	Keyword  *string `thrift:"Keyword,1,optional" form:"keyword" form:"keyword" json:"keyword,omitempty" query:"keyword"`
 	Page     int64   `thrift:"page,2" form:"page" json:"page" query:"page" vd:"$ > 0"`
-	PageSize int64   `thrift:"page_size,3" form:"page_size" json:"page_size" query:"page_size" vd:"($ > 0 || $ <= 100)"`
+	PageSize int64   `thrift:"page_size,3" form:"page_size" form:"page_size" json:"page_size" query:"page_size" vd:"($ > 0 || $ <= 100)"`
 }
 
 func NewQueryUserRequest() *QueryUserRequest {
@@ -1696,7 +1696,7 @@ func (p *DeleteUserResponse) String() string {
 
 type UpdateUserRequest struct {
 	UserID    int64  `thrift:"user_id,1" json:"user_id" path:"user_id" vd:"$>0"`
-	Name      string `thrift:"name,2" form:"name" form:"name" json:"name" vd:"(len($) > 0 && len($) < 100)"`
+	Name      string `thrift:"name,2" form:"name" json:"name" vd:"(len($) > 0 && len($) < 100)"`
 	Gender    Gender `thrift:"gender,3" form:"gender" json:"gender" vd:"($ == 1||$ == 2)"`
 	Age       int64  `thrift:"age,4" form:"age" json:"age" vd:"$>0"`
 	Introduce string `thrift:"introduce,5" form:"introduce" json:"introduce" vd:"(len($) > 0 && len($) < 1000)"`

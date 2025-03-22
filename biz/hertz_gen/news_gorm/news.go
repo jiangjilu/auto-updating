@@ -862,7 +862,7 @@ func (p *CreateNewsResponse) String() string {
 }
 
 type QueryNewsRequest struct {
-	Keyword  *string `thrift:"Keyword,1,optional" form:"keyword" form:"keyword" json:"keyword,omitempty" query:"keyword"`
+	Keyword  *string `thrift:"Keyword,1,optional" form:"keyword" json:"keyword,omitempty" query:"keyword"`
 	Page     int64   `thrift:"page,2" form:"page" json:"page" query:"page" vd:"$ > 0"`
 	PageSize int64   `thrift:"page_size,3" form:"page_size" json:"page_size" query:"page_size" vd:"($ > 0 || $ <= 100)"`
 }
@@ -1697,8 +1697,8 @@ func (p *DeleteNewsResponse) String() string {
 type UpdateNewsRequest struct {
 	ID      int64  `thrift:"id,1" json:"id" path:"id" vd:"$>0"`
 	Title   string `thrift:"title,2" form:"title" json:"title" vd:"(len($) > 0 && len($) < 100)"`
-	State   State  `thrift:"state,3" form:"state" json:"state" vd:"($ == 1||$ == 2)"`
-	Cid     int64  `thrift:"cid,4" form:"cid" form:"cid" json:"cid" vd:"$>0"`
+	State   State  `thrift:"state,3" form:"state" form:"state" json:"state" vd:"($ == 1||$ == 2)"`
+	Cid     int64  `thrift:"cid,4" form:"cid" json:"cid" vd:"$>0"`
 	Content string `thrift:"content,5" form:"content" json:"content" vd:"(len($) > 0 && len($) < 1000)"`
 }
 
